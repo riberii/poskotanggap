@@ -1,0 +1,108 @@
+import { ITEM_UNIT_CATALOG } from "./catalog";
+import type { ExtractionResult, IncidentType, QuantityBasis, Unit } from "./types";
+import { UNITS } from "./types";
+
+/**
+ * EKSTRAKSI SIMULASI BERBASIS ATURAN — BUKAN AI.
+ * Sejak fase 3 hanya dipakai untuk melabeli DATA SEED SIMULASI; form intake
+ * memakai Gemini lewat /api/extract-report. Hasilnya hanya usulan
+ * dan selalu harus direview manusia. Informasi yang tidak ditemukan = null.
+ */
+
+const INCIDENT_KEYWORDS: Array<[IncidentType, RegExp]> = [
+  ["banjir", /\b(banjir|air naik|terendam|genangan)\b/i],
+  ["tanah_longsor", /\b(longsor|tanah longsor)\b/i],
+  ["gempa_bumi", /\b(gempa)\b/i],
+  ["kebakaran", /\b(kebakaran|terbakar)\b/i],
+  ["angin_kencang", /\b(angin kencang|puting beliung|angin puting)\b/i],
+];
+
+const LOCATION_RE =
+  /\b((?:kel(?:urahan)?\.?|desa|ds\.?|kampung|kp\.?|dusun|dsn\.?)\s+[A-Z][\p{L}]+(?:\s+[A-Z][\p{L}]+)?(?:\s*,?\s*RW\s*\d+)?(?:\s*,?\s*RT\s*\d+)?)/iu;
+
+const UNIT_ALIASES: Record<string, Unit> = Object.fromEntries([
+  ...UNITS.map((u) => [u, u] as const),
+  ["dos", "dus"],
+  ["kardus", "dus"],
+  ["liter", "liter"],
+  ["ltr", "liter"],
+  ["kilo", "kg"],
+  ["kilogram", "kg"],
+  ["pcs", "buah"],
+  ["pack", "paket"],
+  ["pak", "paket"],
+]);
+
+const ITEMS = Object.keys(ITEM_UNIT_CATALOG);
+
+function sentenceAround(text: string, index: number, length: number): string {
+  const start = Math.max(0, text.lastIndexOf(".", index) + 1);
+  const endDot = text.indexOf(".", index + length);
+  const end = endDot === -1 ? text.length : endDot + 1;
+  return text.slice(start, end).replace(/\s+/g, " ").trim().slice(0, 300);
+}
+
+function detectBasis(context: string): QuantityBasis {
+  if (/\b(total|seluruh|keseluruhan|semuanya)\b/i.test(context)) return "total";
+  if (/\b(tambahan|kurang|masih butuh|butuh lagi|perlu tambah)\b/i.test(context))
+    return "additional";
+  return "unknown";
+}
+
+export function simulateExtraction(rawText: string): ExtractionResult {
+  const warnings: string[] = [
+    "Ekstraksi simulasi berbasis aturan, bukan AI. Periksa semua field.",
+  ];
+
+  let incidentType: IncidentType | null = null;
+  let incidentEvidence: string | null = null;
+  for (const [type, re] of INCIDENT_KEYWORDS) {
+    const m = re.exec(rawText);
+    if (m) {
+      incidentType = type;
+      incidentEvidence = sentenceAround(rawText, m.index, m[0].length);
+      break;
+    }
+  }
+  if (!incidentType) warnings.push("Jenis kejadian tidak ditemukan.");
+
+  const loc = LOCATION_RE.exec(rawText);
+  const locationText = loc ? loc[1].replace(/\s+/g, " ").trim() : null;
+  const locationEvidence = loc ? sentenceAround(rawText, loc.index, loc[0].length) : null;
+  if (!locationText) warnings.push("Lokasi tidak ditemukan.");
+
+  const needs: ExtractionResult["needs"] = [];
+  for (const item of ITEMS) {
+    const itemRe = new RegExp(`\\b${item.replace(/[-]/g, "[- ]?")}\\b`, "i");
+    const im = itemRe.exec(rawText);
+    if (!im) continue;
+    // Cari "<angka> <satuan>" tepat sebelum nama barang (mis. "50 dus air mineral").
+    const before = rawText.slice(Math.max(0, im.index - 25), im.index);
+    const qm = /(\d+(?:[.,]\d{1,2})?)\s*([a-zA-Z]+)?\s*$/.exec(before);
+    const quantity = qm ? Number(qm[1].replace(",", ".")) : null;
+    const unit = qm?.[2] ? (UNIT_ALIASES[qm[2].toLowerCase()] ?? null) : null;
+    const evidenceQuote = sentenceAround(rawText, im.index, im[0].length);
+    needs.push({
+      item,
+      quantity: quantity !== null && Number.isFinite(quantity) && quantity > 0 ? quantity : null,
+      unit,
+      quantityBasis: detectBasis(evidenceQuote),
+      evidenceQuote,
+    });
+  }
+  if (needs.length === 0) warnings.push("Tidak ada kebutuhan barang yang dikenali.");
+  if (needs.some((n) => n.quantity === null)) warnings.push("Ada kebutuhan tanpa kuantitas.");
+
+  return {
+    source: "simulated_rules",
+    model: null,
+    incidentType,
+    incidentEvidence,
+    locationText,
+    locationEvidence,
+    occurredAtText: null,
+    needs,
+    uncertainties: [],
+    warnings,
+  };
+}

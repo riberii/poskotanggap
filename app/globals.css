@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* Palet: navy gelap + aksen teal terbatas. Kontras teks diuji terhadap navy-900. */
+@theme {
+  --color-navy-950: #070f1e;
+  --color-navy-900: #0b1730;
+  --color-navy-850: #0f1e3b;
+  --color-navy-800: #142646;
+  --color-navy-700: #213659;
+  --color-navy-600: #30497a;
+  --color-ink: #e7edf6;
+  --color-muted: #a3b2c9;
+  --color-subtle: #7f90ab;
+  --color-teal-accent: #3cc8b8;
+  --color-teal-strong: #5ee0d0;
+  --color-ok: #6fd6a0;
+  --color-warn: #f2c063;
+  --color-dup: #f39a5b;
+  --color-danger: #f28b8b;
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-navy-950);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-strong);
+  outline-offset: 2px;
+}

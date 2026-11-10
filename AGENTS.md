@@ -13,7 +13,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Rencana & status milestone: `PLAN.md` (detail: `IMPLEMENTATION_PLAN.md`, `PROJECT_BRIEF.md`).
 
 ## Arsitektur
+<<<<<<< HEAD
 - `app/` — halaman `/intake`, `/dashboard`, `/login`; route handler `/api/extract-report` (Gemini, hanya draf), `/api/reports`, `/api/reports/[id]`, `/api/review-queue`, `/api/dashboard`, `/api/inventory`, `/auth/logout`.
+=======
+- `app/` — halaman `/intake`, `/dashboard`, `/login`; route handler `/api/extract`, `/api/reports`, `/api/reports/[id]`, `/api/review-queue`, `/api/dashboard`, `/api/inventory`, `/auth/logout`.
+>>>>>>> 9d5b0f78dccc3e42ef7e3ebf32b603393a85ccb0
 - `lib/domain/` — logika murni & deterministik (normalisasi, fingerprint SHA-256, duplikat, agregasi, kekurangan stok, schema Zod, ekstraktor simulasi). Wajib diuji di `tests/`.
 - `lib/services/` — aturan bisnis server; menghitung ulang semua nilai turunan (status, fingerprint, area, duplicate_of, verified_at) — jangan percaya browser.
 - `lib/data/` — interface `DataRepository` dengan `MockRepository` (tanpa env Supabase) dan `SupabaseRepository`. `getRequestContext()` menegakkan login + keanggotaan tabel `operators`.
@@ -25,4 +29,7 @@ Rencana & status milestone: `PLAN.md` (detail: `IMPLEMENTATION_PLAN.md`, `PROJEC
 - Potensi duplikat hanya ditandai; tidak pernah dihapus/digabung. Laporan tidak punya policy DELETE; gunakan status `rejected`.
 - Field yang tidak ditemukan harus `null`. Semua data demo diberi label simulasi.
 - Jangan pakai service-role key; jangan taruh secret di frontend.
+<<<<<<< HEAD
 - Output AI hanya draf: `lib/domain/ai-extraction.ts` mengosongkan nilai yang tidak didukung kutipan persis dari teks asli; respons di luar skema ditolak, bukan diperbaiki. Mode mock (tanpa login) menolak ekstraksi AI kecuali `AI_EXTRACTION_ALLOW_MOCK_MODE=true`.
+=======
+>>>>>>> 9d5b0f78dccc3e42ef7e3ebf32b603393a85ccb0

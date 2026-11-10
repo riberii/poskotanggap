@@ -3,7 +3,11 @@
 Prototipe hackathon LOGICODIX 2026 untuk membantu operator posko mengubah laporan bencana teks bebas menjadi data terstruktur, mendeteksi laporan berulang, memverifikasi kebutuhan secara manual, dan merekap kebutuhan vs stok. **Bukan production-ready. Tidak terhubung ke layanan tanggap darurat resmi. Semua data demo adalah simulasi.**
 
 ## Teknologi
+<<<<<<< HEAD
 Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Zod 4 · Supabase (PostgreSQL + Auth, via `@supabase/ssr`) · Gemini via `@google/genai` (server-side) · Vitest.
+=======
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Zod 4 · Supabase (PostgreSQL + Auth, via `@supabase/ssr`) · Vitest. Gemini direncanakan untuk fase 3.
+>>>>>>> 9d5b0f78dccc3e42ef7e3ebf32b603393a85ccb0
 
 ## Menjalankan lokal
 ```bash
@@ -20,6 +24,7 @@ Tanpa env Supabase, aplikasi berjalan dalam **mode mock** (data simulasi in-memo
 3. Buat user di Supabase Auth, lalu `insert into public.operators (user_id) values ('<uuid>');`.
 4. Salin `.env.example` ke `.env.local`, isi `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Service-role key tidak dipakai.
 
+<<<<<<< HEAD
 ### Ekstraksi AI (Gemini)
 - Endpoint server `POST /api/extract-report` → hanya menghasilkan **draf** untuk review manusia; tidak menyimpan dan tidak pernah memverifikasi.
 - Model dibaca dari `GEMINI_MODEL` (default `gemini-3.8-flash`). Kredensial dibaca SDK dari `GEMINI_API_KEY` di server. Di Netlify, kredensial ini disuntik otomatis oleh Netlify AI Gateway; di platform lain (mis. Vercel) isi `GEMINI_API_KEY` sebagai env server, jangan pernah `NEXT_PUBLIC_`.
@@ -29,3 +34,7 @@ Tanpa env Supabase, aplikasi berjalan dalam **mode mock** (data simulasi in-memo
 
 ## Roadmap
 Lihat `PLAN.md`: polishing dan dokumentasi demo (fase 4).
+=======
+## Roadmap
+Lihat `PLAN.md`: integrasi Gemini (fase 3), polishing dan dokumentasi demo (fase 4).
+>>>>>>> 9d5b0f78dccc3e42ef7e3ebf32b603393a85ccb0

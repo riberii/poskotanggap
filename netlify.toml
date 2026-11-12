@@ -1,0 +1,19 @@
+[build]
+  command = "npm ci --include=dev && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Aplikasi adalah SPA Vite. Kode Next.js legacy masih ada di repo tetapi tidak dibangun;
+  # flag ini mencegah Netlify memasang plugin Next.js otomatis pada output Vite.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[dev]
+  command = "npm run dev -- --host 127.0.0.1 --port 5173"
+  targetPort = 5173
+
+# SPA fallback: deep link seperti /dashboard disajikan oleh index.html (file statis yang ada tetap diutamakan).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

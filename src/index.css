@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/*
+ * Tema terang, datar, kontras tinggi. Nama token (navy-*, teal-*) dipertahankan dari versi
+ * sebelumnya agar komponen lama tetap bekerja; nilainya kini permukaan netral + satu warna aksi.
+ *   navy-950 = permukaan input/kartu   navy-900 = latar halaman   navy-850/800 = panel dalam / hover
+ *   navy-700 / 600 = garis / garis tegas
+ */
+@theme {
+  --color-navy-950: #ffffff;
+  --color-navy-900: #f4f6f8;
+  --color-navy-850: #f6f8fa;
+  --color-navy-800: #eaeef2;
+  --color-navy-700: #d3dbe2;
+  --color-navy-600: #9aa8b3;
+  --color-ink: #14232b;
+  --color-muted: #44565f;
+  --color-subtle: #5c6e78;
+  --color-teal-accent: #0f6e66;
+  --color-teal-strong: #0a524c;
+  --color-ok: #17703f;
+  --color-warn: #8a5a00;
+  --color-dup: #b0460c;
+  --color-danger: #b42318;
+
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+}
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-navy-900);
+  color: var(--color-ink);
+}
+
+h1, h2, h3 { font-family: var(--font-sans); letter-spacing: -0.01em; }
+
+.glass-panel {
+  background: #fff;
+  border: 1px solid var(--color-navy-700);
+}
+
+.glass-header {
+  background: #fff;
+  border-bottom: 1px solid var(--color-navy-700);
+}
+
+::selection { background: #bfe6df; color: #0a1821; }
+
+mark.evidence {
+  background: #fff1c2;
+  color: inherit;
+  border-bottom: 2px solid #e0a800;
+  padding: 0 1px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-accent);
+  outline-offset: 2px;
+}
+
+@keyframes pulse-soft { 0%,100% { opacity: 1 } 50% { opacity: .5 } }
+.skeleton { background: var(--color-navy-800); border-radius: 6px; animation: pulse-soft 1.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Animasi bermakna: hanya transform/opacity, ease-out, <=400 ms (centang 500 ms). */
+@keyframes draw-check { from { stroke-dashoffset: 24 } to { stroke-dashoffset: 0 } }
+.check-draw { stroke-dasharray: 24; animation: draw-check .5s ease-out both; }
+@keyframes pop-in { from { opacity: 0; transform: scale(.85) } to { opacity: 1; transform: scale(1) } }
+.pop-in { animation: pop-in .35s ease-out both; }
+@keyframes slide-in { from { opacity: 0; transform: translateX(-12px) } to { opacity: 1; transform: none } }
+.row-new { animation: slide-in .3s ease-out both; }
+@keyframes flash-fade { from { background-color: #fff1c2 } to { background-color: transparent } }
+.flash { animation: flash-fade 1.5s ease-out both; }
+@keyframes pulse-once { 0% { transform: scale(1) } 40% { transform: scale(1.03) } 100% { transform: scale(1) } }
+.pulse-once { animation: pulse-once .4s ease-out 1 both; }
+@keyframes bump { 50% { transform: scale(1.12) } }
+.bump { animation: bump .35s ease-out 1; }
+/* Sapuan sorot: kalimat sumber disorot saat field difokus/di-hover (transform saja). */
+mark.sweep { position: relative; isolation: isolate; background: transparent; }
+mark.sweep::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #ffd84d; transform-origin: left; animation: sweep .3s ease-out both; }
+@keyframes sweep { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+/* Batang kekurangan: segmen merah melebar dari stok ke kebutuhan. */
+.short-bar { transform-origin: left; animation: bar-grow .4s ease-out both; }
+@keyframes bar-grow { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+/* View Transitions: antrean keluar halus. Dimatikan bila pengguna meminta gerak berkurang. */
+::view-transition-old(*), ::view-transition-new(*) { animation-duration: .3s; animation-timing-function: ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+.step-fill { transform-origin: left; transition: transform .4s ease-out; }

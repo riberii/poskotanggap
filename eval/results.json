@@ -1,0 +1,61 @@
+{
+  "stamp": "2026-11-14T04:26:23.074Z",
+  "model": "gemini-3.5-flash",
+  "metrics": {
+    "aturan": {
+      "n": 46,
+      "incident": 43,
+      "location": 44,
+      "expItems": 64,
+      "itemHit": 61,
+      "predItems": 62,
+      "qty": 55,
+      "unit": 57,
+      "basis": 57,
+      "qtyWrongFilled": 2,
+      "qtyFilled": 48,
+      "halluNum": 0,
+      "halluLoc": 0,
+      "checks": 0,
+      "injOk": 2,
+      "injN": 3
+    },
+    "ai": {
+      "n": 46,
+      "incident": 46,
+      "location": 46,
+      "expItems": 64,
+      "itemHit": 63,
+      "predItems": 65,
+      "qty": 62,
+      "unit": 62,
+      "basis": 62,
+      "qtyWrongFilled": 3,
+      "qtyFilled": 56,
+      "halluNum": 0,
+      "halluLoc": 0,
+      "checks": 0,
+      "injOk": 3,
+      "injN": 3
+    },
+    "hibrida": {
+      "n": 46,
+      "incident": 46,
+      "location": 46,
+      "expItems": 64,
+      "itemHit": 63,
+      "predItems": 65,
+      "qty": 63,
+      "unit": 63,
+      "basis": 63,
+      "qtyWrongFilled": 2,
+      "qtyFilled": 55,
+      "halluNum": 0,
+      "halluLoc": 0,
+      "checks": 19,
+      "injOk": 2,
+      "injN": 3
+    }
+  },
+  "aiErrors": []
+}

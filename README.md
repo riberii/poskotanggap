@@ -2,10 +2,9 @@
 
 Alat posko bencana yang mengubah laporan warga berbentuk teks bebas menjadi **data kebutuhan yang diverifikasi manusia**, lalu membandingkannya dengan stok untuk menunjukkan apa yang paling butuh perhatian sekarang.
 
-- **Tim:** [ISI: nama tim]
-- **Anggota:** [ISI: nama lengkap, peran, kontak tiap anggota]
+- **Tim:** Monotropa
+- **Anggota:** Marquis Verino | Timothea Owen | Christiano Orlando Ruslie | Nicholas Brandon Santoso
 - **Lomba:** LOGICODIX 2026 · Kategori **Web** · Subtema **Civic Tech & Community Service**
-- **Deploy:** [ISI: URL deploy dari commit final] · **Commit final:** [ISI: hash commit final]
 
 > Prototipe dengan data simulasi. Bukan layanan darurat; dalam keadaan darurat hubungi 112.
 

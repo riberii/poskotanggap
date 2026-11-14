@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "plugins": [], "incremental": false, "types": ["vite/client"] },
+  "include": ["src", "components", "lib/domain", "lib/data/local-backend.ts", "lib/data/local-storage-repository.ts", "lib/data/seed-data.ts", "lib/api-client.ts", "lib/format.ts", "lib/services/reports.ts"]
+}
